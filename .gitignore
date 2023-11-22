@@ -1,0 +1,6 @@
+*.pyc
+/*.log
+/tg-bot.session
+/tg-bot.session-journal
+/Config/Config.json
+/test.py
