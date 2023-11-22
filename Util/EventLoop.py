@@ -6,7 +6,7 @@ interval = 1
 lock = threading.Lock()
 
 def periodic_func(func):
-    while True :
+    while True:
         with lock:
             func()
             time.sleep(interval)

@@ -3,7 +3,7 @@ import Util.QQ.QQBotClient as QQ
 import Util.Message.Message as Message
 from pyrogram import filters
 
-async def func(message : Message):
+async def func(message: Message):
     await QQ.send_msg(message.group_id, message.log_msg())
 
 QQ.init()

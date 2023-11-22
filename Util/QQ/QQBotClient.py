@@ -56,18 +56,18 @@ def get_msg(message: QQMessage) -> Message:
         print(message)
         return create_none_message()
 
-def add_handler(func : Callable, group_id: int = 0):
+def add_handler(func: Callable, group_id: int = 0):
     global app, message_callback
     if group_id not in message_callback:
         message_callback[str(group_id)] = []
-    message_callback[str(group_id)].append(QQMessageHandler(lambda m : func(get_msg(m))))
+    message_callback[str(group_id)].append(QQMessageHandler(lambda m: func(get_msg(m))))
 
-async def delete_msg(group_id : int, message_id : int):
+async def delete_msg(group_id: int, message_id: int):
     global app
 
-async def send_msg(groupo_id : int, msg : str):
+async def send_msg(groupo_id: int, msg: str):
     global app
     await app.api.post_message(channel_id = groupo_id, content = msg)
 
-async def delete_all_self_msg(group_id : int):
+async def delete_all_self_msg(group_id: int):
     global app
