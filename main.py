@@ -3,19 +3,21 @@ from pyrogram import filters
 import Util.TG.TGBotClient as TG
 import Util.QQ.QQBotClient as QQ
 import Util.Message.Message as Message
+import Config.Config as Config
 
 async def qq_func(message: Message):
     message.log_msg()
-    await TG.send_msg(-4078426436, message.msg)
+    await TG.send_msg(Config.tg_self_group, message.msg)
 
 async def tg_func(message: Message):
     message.log_msg()
-    if message.group_id == -4078426436 and message.user_id == 5863448060:
-        await QQ.add_message(634216710, message.msg)
+    if message.group_id == Config.tg_self_group and message.user_id == Config.tg_self_id:
+        await QQ.add_message(Config.qq_group_id, message.msg)
 
 if __name__ == "__main__":
     QQ.init()
-    QQ.add_handler(qq_func, 634216710)
+    QQ.add_handler(qq_func, Config.qq_group_id)
+    QQ.add_handler(qq_func, Config.qq_test_group_id)
 
     QQ.start_task()
 

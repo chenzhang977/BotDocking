@@ -47,13 +47,13 @@ async def message_handler(context: WsContext, message: qqbot.Message):
             msg_obj = await get_msg(message)
             await handler.callback(msg_obj)
 
-async def get_msg(message: qqbot.Message) -> Message:
-    def get_time_stamp(time) -> int:
-        timestamp = datetime.strptime(time, "%Y-%m-%dT%H:%M:%S%z").timestamp()
+async def get_time_stamp(time) -> int:
+        timestamp = datetime.datetime.strptime(time, "%Y-%m-%dT%H:%M:%S%z").timestamp()
         return int(timestamp)
+
+async def get_msg(message: qqbot.Message) -> Message:
     try:
-        global last_message_id, last_message
-        time = get_time_stamp(message.timestamp)
+        time = await get_time_stamp(message.timestamp)
         message_id = message.id
 
         group_id = message.channel_id
