@@ -1,18 +1,19 @@
-import asyncio
-from multiprocessing import Process
-import threading
 import time
 import qqbot
-from qqbot.model.ws_context import WsContext
+import asyncio
+import schedule
+import threading
+import multiprocessing
+
+from datetime import datetime
 from typing import Callable
 from collections import OrderedDict
+from qqbot.model.ws_context import WsContext
+from qqbot.model.message import MessageSendRequest
 
-import schedule
+import Config.Config as Config
 from Util.QQ.QQMessageHandler import *
 from Util.Message.MessageManager import *
-from datetime import datetime
-import Config.Config as Config
-from qqbot.model.message import MessageSendRequest
 
 APPID = Config.qq_bot_id
 TOKEN = Config.qq_bot_token
@@ -67,10 +68,14 @@ async def get_msg(message: qqbot.Message) -> Message:
         return await create_none_message()  
 
 def start_task():
-    p = Process(target = start_task)
+    global sync_messages
+    sync_messages = multiprocessing.Manager().list()
+    p = multiprocessing.Process(target = start_message_task, args=(sync_messages, ))
     p.start()
 
-def start_message_task():
+def start_message_task(que):
+    global sync_messages
+    sync_messages = que
     schedule.every(2).seconds.do(message_task)
 
     while True:
@@ -87,15 +92,14 @@ async def notify_text(group_id: str, content: str):
 
 async def send_queue_message():
     global sync_messages
-    for message in sync_messages:
+    while len(sync_messages):
+        message = sync_messages.pop(0)
         try:
             await notify_text(group_id = message.group_id, content = message.msg)
         except BaseException as e:
             print(e)
-    
-    sync_messages = []
 
 async def add_message(group_id: int, content: str):
-    t = int(time.time())
-    meaasge =  await create_qq_message(time.time(), group_id = group_id, msg = content)
+    global sync_messages
+    meaasge =  await create_qq_message(int(time.time()), group_id = group_id, msg = content)
     sync_messages.append(meaasge)
