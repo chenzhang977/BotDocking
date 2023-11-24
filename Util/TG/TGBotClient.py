@@ -18,7 +18,7 @@ def run():
     global app
     app.run()
 
-def get_msg(message) -> Message:
+async def get_msg(message) -> Message:
     try:
         time = get_time_stamp(message.date)
         message_id = message.id
@@ -32,15 +32,17 @@ def get_msg(message) -> Message:
 
         text = message.text
 
-        return create_tg_message(time, group_id, group_name,user_id, user_name, message_id, text)
+        return await create_tg_message(time, group_id, group_name,user_id, user_name, message_id, text)
     except BaseException as e:
         print(e)
         print(message)
-        return create_none_message()
+        return await create_none_message()
 
-def add_handler(func : Callable, filters = None,group: int = 0):
+def add_handler(func : Callable, filters = None, group: int = 0):
     global app
-    app.add_handler(pyrogram.handlers.MessageHandler(lambda c, m : func(get_msg(m)), filters), group)
+    @app.on_message(group)
+    async def callback(client, message):
+       await func(await get_msg(message))
 
 async def delete_msg(group_id : int, message_id : int):
     global app
