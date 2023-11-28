@@ -1,8 +1,9 @@
 import datetime
 
 class MessageType:
-    TG = 0
-    QQ = 1
+    NULL = 0
+    TG = 1
+    QQ = 2
 
 class Message:
     def __init__(self, time: int, group_id: int, group_name: str, user_id: int, user_name: str, msg_id: int, msg: str, msg_type: MessageType, auto_delete: int = -1):

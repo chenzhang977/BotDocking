@@ -38,9 +38,9 @@ async def get_msg(message) -> Message:
         print(message)
         return await create_none_message()
 
-def add_handler(func : Callable, filters = None, group: int = 0):
+def add_handler(func : Callable, filters = None):
     global app
-    @app.on_message(group)
+    @app.on_message(filters)
     async def callback(client, message):
        await func(await get_msg(message))
 
@@ -50,6 +50,9 @@ async def delete_msg(group_id : int, message_id : int):
 
 async def send_msg(groupo_id : int, msg : str):
     global app
+    if msg == "":
+        return
+    
     await app.send_message(groupo_id, msg)
 
 async def delete_all_self_msg(group_id : int):

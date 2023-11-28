@@ -101,5 +101,8 @@ async def send_queue_message():
 
 async def add_message(group_id: int, content: str):
     global sync_messages
+    if content == "":
+        return
+    
     meaasge =  await create_qq_message(int(time.time()), group_id = group_id, msg = content)
     sync_messages.append(meaasge)
