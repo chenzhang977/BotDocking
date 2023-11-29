@@ -1,6 +1,5 @@
 import threading
 import time
-import re
 
 interval = 1
 lock = threading.Lock()

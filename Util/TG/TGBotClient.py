@@ -1,8 +1,9 @@
+import traceback
+import Util.Message.MessageManager as MessageManager
+
 from pyrogram import Client
-from typing import Callable
-from Util.Message.MessageManager import *
-import pyrogram
-import datetime
+from Util.Message.Message import Message
+
 
 __all__ = ["run", "add_handler", "delete_msg", "send_msg", "delete_all_self_msg"]
 app = None
@@ -32,17 +33,25 @@ async def get_msg(message) -> Message:
 
         text = message.text
 
-        return await create_tg_message(time, group_id, group_name,user_id, user_name, message_id, text)
+        return await MessageManager.create_tg_message(time, group_id, group_name,user_id, user_name, message_id, text)
     except BaseException as e:
+        s = traceback.format_exc()
         print(e)
-        print(message)
-        return await create_none_message()
+        print(s)
+        return await MessageManager.create_none_message()
 
-def add_handler(func : Callable, filters = None):
+def add_handler(handlers, filters = None):
     global app
     @app.on_message(filters)
     async def callback(client, message):
-       await func(await get_msg(message))
+        msg = await get_msg(message)
+        for handler in handlers:
+            try:
+                await handler.callback(msg)
+            except Exception as e:
+                s = traceback.format_exc()
+                print(e)
+                print(s)
 
 async def delete_msg(group_id : int, message_id : int):
     global app

@@ -1,4 +1,5 @@
 import time
+import traceback
 import qqbot
 import asyncio
 import schedule
@@ -6,19 +7,18 @@ import threading
 import multiprocessing
 
 from datetime import datetime
-from typing import Callable
-from collections import OrderedDict
-from qqbot.model.ws_context import WsContext
-from qqbot.model.message import MessageSendRequest
+from Util.Message.Message import Message
 
 import Config.Config as Config
-from Util.QQ.QQMessageHandler import *
-from Util.Message.MessageManager import *
+import Util.Message.MessageManager as MessageManager
+
+from qqbot.model.ws_context import WsContext
+from qqbot.model.message import MessageSendRequest
 
 APPID = Config.qq_bot_id
 TOKEN = Config.qq_bot_token
 
-message_callback = OrderedDict()
+message_handler = []
 sync_messages = []
 
 __all__ = ["init", "add_handler", "add_message", "start_task"]
@@ -31,24 +31,26 @@ def run():
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     t_token = qqbot.Token(APPID, TOKEN)
-    qqbot_handler = qqbot.Handler(qqbot.HandlerType.MESSAGE_EVENT_HANDLER, message_handler)
+    qqbot_handler = qqbot.Handler(qqbot.HandlerType.MESSAGE_EVENT_HANDLER, message_callback)
     qqbot.async_listen_events(t_token, False, qqbot_handler)
 
-def add_handler(func: Callable, group_id: int = 0):
-    global app, message_callback
-    if group_id not in message_callback:
-        message_callback[str(group_id)] = []
-    message_callback[str(group_id)].append(QQMessageHandler(func))
+def add_handler(handler):
+    global message_handler
+    message_handler = handler
 
-async def message_handler(context: WsContext, message: qqbot.Message):
+async def message_callback(context: WsContext, message: qqbot.Message):
     global message_callback
-    if str(message.channel_id) in message_callback.keys():
-        for handler in message_callback[message.channel_id]:
-            msg_obj = await get_msg(message)
-            await handler.callback(msg_obj)
+    msg = await get_msg(message)
+    for handler in message_handler:
+        try:
+            await handler.callback(msg)
+        except Exception as e:
+            s = traceback.format_exc()
+            print(e)
+            print(s)
 
 async def get_time_stamp(time) -> int:
-        timestamp = datetime.datetime.strptime(time, "%Y-%m-%dT%H:%M:%S%z").timestamp()
+        timestamp = datetime.strptime(time, "%Y-%m-%dT%H:%M:%S%z").timestamp()
         return int(timestamp)
 
 async def get_msg(message: qqbot.Message) -> Message:
@@ -61,11 +63,12 @@ async def get_msg(message: qqbot.Message) -> Message:
         user_id =  message.author and message.author.id or 0
         user_name = message.author and message.author.username or None
         text = message.content
-        return await create_qq_message(time, group_id, group_name, user_id, user_name, message_id, text)
+        return await MessageManager.create_qq_message(time, group_id, group_name, user_id, user_name, message_id, text)
     except BaseException as e:
+        s = traceback.format_exc()
         print(e)
-        print(message)
-        return await create_none_message()  
+        print(s)
+        return await MessageManager.create_none_message()  
 
 def start_task():
     global sync_messages
@@ -97,12 +100,14 @@ async def send_queue_message():
         try:
             await notify_text(group_id = message.group_id, content = message.msg)
         except BaseException as e:
+            s = traceback.format_exc()
             print(e)
+            print(s)
 
 async def add_message(group_id: int, content: str):
     global sync_messages
     if content == "":
         return
     
-    meaasge =  await create_qq_message(int(time.time()), group_id = group_id, msg = content)
+    meaasge =  await MessageManager.create_qq_message(int(time.time()), group_id = group_id, msg = content)
     sync_messages.append(meaasge)
