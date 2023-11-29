@@ -10,6 +10,9 @@ class BaseHandler:
 
     async def handle(self, message : Message):
         pass
+    
+    def help(self) -> str:
+        return ""
 
     async def callback(self, message : Message):
         if await self.check_cmd(message.msg):

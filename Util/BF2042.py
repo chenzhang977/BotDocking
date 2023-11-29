@@ -34,8 +34,8 @@ def get_record(name: str, hours: int = 24):
     if len(ret) == 1:
         info = ret[0]
         if len(info) == 3:
-            kill = info[0]
-            deaths = info[1]
-            damage = info[2]
+            kill = info[0] or 0
+            deaths = info[1] or 0
+            damage = info[2] or 0
 
     return {'kill': kill, 'deaths': deaths, 'damage': damage}
