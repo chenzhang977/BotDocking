@@ -1,9 +1,13 @@
 import json
+import traceback
 import requests
 
 from datetime import datetime, timedelta
 
 import Util.DB.DB as DB
+
+def str_format(name: str, kill: int, deaths: int, damage: int):
+    return  f"name: {name}\nkill: {kill}\ndeaths: {deaths}\ndamage: {damage}\nkd: {kill/(deaths == 0 and 1 or deaths)}"
 
 def get_info_by_api(name: str):
     response = requests.get('https://api.gametools.network/bf2042/stats?name=' + name)
@@ -15,18 +19,30 @@ def get_info_by_api(name: str):
         if kill > 0:
             update_info(name, kill, deaths, damage)
 
-        return {'kill': kill, 'deaths': deaths, 'damage': damage}
+        return str_format(name, kill, deaths, damage)
+    return "查询异常, 请查看log"
 
 def update_info(name: str, kill: int, deaths: int, damage: int):
     updateTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     cmd = f"INSERT INTO BF (updateTime, name, kill, deaths, damage) VALUES ('{updateTime}','{name}', '{kill}', '{deaths}', '{damage}')"
-    DB.execute(cmd)
+    try:
+        DB.execute(cmd)
+    except Exception as e:
+        s = traceback.format_exc()
+        print(e)
+        print(s)
 
 def get_record(name: str, hours: int = 24):
     end_time = datetime.now()
     start_time = end_time - timedelta(hours = hours)
     cmd = f"SELECT MAX(kill)-MIN(kill), MAX(deaths)-MIN(deaths), MAX(damage)-MIN(damage) FROM BF WHERE name='{name}' AND updateTime BETWEEN '{start_time.strftime('%Y-%m-%d %H:%M:%S')}' AND '{end_time.strftime('%Y-%m-%d %H:%M:%S')}'"
-    ret = DB.execute(cmd)
+    ret = []
+    try:
+        ret = DB.execute(cmd)
+    except Exception as e:
+        s = traceback.format_exc()
+        print(e)
+        print(s)
 
     kill = 0
     deaths = 0
@@ -38,7 +54,7 @@ def get_record(name: str, hours: int = 24):
             deaths = info[1] or 0
             damage = info[2] or 0
 
-    return {'kill': kill, 'deaths': deaths, 'damage': damage}
+    return str_format(name, kill, deaths, damage)
 
 def bind_id(id: int, name: str):
     cmd = f"INSERT OR REPLACE INTO user (uid, bf_name) VALUES ('{id}', '{name}')"

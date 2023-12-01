@@ -29,22 +29,14 @@ class BF2042Handler(BaseHandler):
             return "未绑定游戏id\n" + self.help()
         
         #改为提交任务
-        info = BF2042.get_info_by_api(name)
-        msg = "查询异常,请查看log"
-        if info:
-            msg = f"name: {name}\nkill: {info['kill']}\ndeaths: {info['deaths']}\ndamage: {info['damage']}\nkd: {info['kill']/(info['deaths'] == 0 and 1 or info['deaths'])}"
-        return msg
+        return BF2042.get_info_by_api(name)
 
     async def get_24_info(self, id: int, name: str):
         name = name == "" and await self.get_game_id(id) or name
         if not name:
             return "未绑定游戏id\n" + self.help()
     
-        info = BF2042.get_record(name)
-        msg = "查询异常,请查看log"
-        if info:
-            msg = f"name: {name}\nkill: {info['kill']}\ndeaths: {info['deaths']}\ndamage: {info['damage']}\nkd: {info['kill']/(info['deaths'] == 0 and 1 or info['deaths'])}"
-        return msg
+        return BF2042.get_record(name)
     
     async def bind_id(self, id: int, name: str):
         BF2042.bind_id(id, name)
