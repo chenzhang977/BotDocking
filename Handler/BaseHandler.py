@@ -2,7 +2,6 @@ from Util.Message.Message import Message
 
 class BaseHandler:
     def __init__(self):
-        self.group_id = 0
         self.cmd = ""
     
     async def check_cmd(self, msg: str):

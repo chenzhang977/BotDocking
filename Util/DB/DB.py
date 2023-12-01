@@ -13,10 +13,14 @@ def init():
 def create_user_table():
     global conn, c
     c.execute('''CREATE TABLE IF NOT EXISTS user
-                (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                uid INTEGER
-                battlefield_name TEXT
+                (uid TEXT PRIMARY KEY,
+                bf_name TEXT
                 )''')
+    conn.commit()
+
+def delete_user_table():
+    global conn, c
+    c.execute('''DROP TABLE user''')
     conn.commit()
 
 def create_BF2042_table():

@@ -39,3 +39,23 @@ def get_record(name: str, hours: int = 24):
             damage = info[2] or 0
 
     return {'kill': kill, 'deaths': deaths, 'damage': damage}
+
+def bind_id(id: int, name: str):
+    cmd = f"INSERT OR REPLACE INTO user (uid, bf_name) VALUES ('{id}', '{name}')"
+    return  DB.execute(cmd)
+
+def get_name(id: int):
+    cmd = f"SELECT DISTINCT bf_name FROM user WHERE uid='{id}'"
+    ret = DB.execute(cmd)
+
+    if len(ret) == 1:
+        return ret[0][0]
+    else:
+        return None
+
+def get_all_name():
+    cmd = "SELECT DISTINCT name FROM BF"
+    ret = DB.execute(cmd)
+    return ret
+
+#DB.execute("DELETE FROM BF WHERE name = 'aaa';")

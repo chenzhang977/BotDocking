@@ -79,7 +79,7 @@ def start_task():
 def start_message_task(que):
     global sync_messages
     sync_messages = que
-    schedule.every(2).seconds.do(message_task)
+    schedule.every(1).seconds.do(message_task)
 
     while True:
         schedule.run_pending()

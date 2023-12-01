@@ -11,37 +11,54 @@ class BF2042Handler(BaseHandler):
         self.func = {}
         self.func["info"] = self.get_info
         self.func["24info"] = self.get_24_info
+        self.func["bind"] = self.bind_id
     
     def help(self) -> str:
         text = ""
-        text = text + "【2042 info name】 可调用api查询玩家信息\n"
-        text = text + "【2042 24info name】 可查询数据库内近24小时玩家信息(TODO 定时任务更新信息)\n"
+        text = text + "【2042 bind name】 绑定游戏id\n"
+        text = text + "【2042 info name(可选)】 可调用api玩家信息,name为空时查询绑定的角色信息\n"
+        text = text + "【2042 24info name(可选)】 可查询数据库内玩家近24小时的信息,name为空时查询绑定的角色信息\n"
         return text
 
-    async def get_info(self, name: str):
+    async def get_game_id(self, id: int)->str:
+        return  BF2042.get_name(id)
+
+    async def get_info(self, id: int, name:str):
+        name = name == "" and await self.get_game_id(id) or name
+        if not name:
+            return "未绑定游戏id\n" + self.help()
+        
+        #改为提交任务
         info = BF2042.get_info_by_api(name)
-        msg = "查询异常,请查看异常处理"
+        msg = "查询异常,请查看log"
         if info:
-            msg = f"kill: {info['kill']}\ndeaths: {info['deaths']}\ndamage: {info['damage']}\nkd: {info['kill']/(info['deaths'] == 0 and 1 or info['deaths'])}"
+            msg = f"name: {name}\nkill: {info['kill']}\ndeaths: {info['deaths']}\ndamage: {info['damage']}\nkd: {info['kill']/(info['deaths'] == 0 and 1 or info['deaths'])}"
         return msg
 
-    async def get_24_info(self, name: str):
+    async def get_24_info(self, id: int, name: str):
+        name = name == "" and await self.get_game_id(id) or name
+        if not name:
+            return "未绑定游戏id\n" + self.help()
+    
         info = BF2042.get_record(name)
-        msg = "查询异常,请查看异常处理"
+        msg = "查询异常,请查看log"
         if info:
-            msg = f"kill: {info['kill']}\ndeaths: {info['deaths']}\ndamage: {info['damage']}\nkd: {info['kill']/(info['deaths'] == 0 and 1 or info['deaths'])}"
+            msg = f"name: {name}\nkill: {info['kill']}\ndeaths: {info['deaths']}\ndamage: {info['damage']}\nkd: {info['kill']/(info['deaths'] == 0 and 1 or info['deaths'])}"
         return msg
     
+    async def bind_id(self, id: int, name: str):
+        BF2042.bind_id(id, name)
+        return await self.get_info(id, name)
 
     async def handle(self, message : Message):
         cmds = message.msg.split(" ")
-        if len(cmds) != 3:
+        if len(cmds) < 2:
             return
         
         func_name = cmds[1]
-        name = cmds[2]
+        name = len(cmds) > 2 and cmds[2] or ""
 
         if func_name in self.func:
-            msg = await self.func[func_name](name)
+            msg = await self.func[func_name](message.user_id, name)
             ret = await MessageManager.create_message(group_id = message.group_id, msg = msg, type = message.msg_type)
             await MessageManager.send_message(ret)
