@@ -14,6 +14,7 @@ def get_time_stamp(time) -> int:
 def init(name : str):
     global app
     app = Client(name)
+    #app.set_proxy(hostname = "proxy.example.com", port = 8080, username = "proxy_username", password = "proxy_password")
 
 def run():
     global app

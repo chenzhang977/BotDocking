@@ -12,7 +12,6 @@ if __name__ == "__main__":
     
     QQ.init()
     QQ.add_handler(HandlerManager.create_all_handler())
-    QQ.start_task()
 
     TG.init("tg-bot")
     TG.add_handler(HandlerManager.create_all_handler(), filters.group)

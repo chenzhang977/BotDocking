@@ -1,6 +1,7 @@
 from .LogHandler import LogHandler
 from .HalpHandler import HalpHandler
 from .BF2042Handler import BF2042Handler
+from .Forwardhandler import Forwardhandler
 
 help_text = ""
 
@@ -10,6 +11,7 @@ def create_all_handler():
     handlers.append(LogHandler())
     handlers.append(HalpHandler())
     handlers.append(BF2042Handler())
+    handlers.append(Forwardhandler())
 
     help_text = ""
     for handler in handlers:

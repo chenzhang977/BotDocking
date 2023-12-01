@@ -1,10 +1,7 @@
-import time
 import traceback
 import qqbot
 import asyncio
-import schedule
 import threading
-import multiprocessing
 
 from datetime import datetime
 from Util.Message.Message import Message
@@ -19,9 +16,8 @@ APPID = Config.qq_bot_id
 TOKEN = Config.qq_bot_token
 
 message_handler = []
-sync_messages = []
 
-__all__ = ["init", "add_handler", "add_message", "start_task"]
+__all__ = ["init", "add_handler", "send_message"]
 
 def init():
     thread = threading.Thread(target = run)
@@ -70,44 +66,14 @@ async def get_msg(message: qqbot.Message) -> Message:
         print(s)
         return await MessageManager.create_none_message()  
 
-def start_task():
-    global sync_messages
-    sync_messages = multiprocessing.Manager().list()
-    p = multiprocessing.Process(target = start_message_task, args=(sync_messages, ))
-    p.start()
-
-def start_message_task(que):
-    global sync_messages
-    sync_messages = que
-    schedule.every(1).seconds.do(message_task)
-
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
-
-def message_task():
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(send_queue_message())
-
 async def notify_text(group_id: str, content: str):
     message_api = qqbot.AsyncMessageAPI(qqbot.Token(APPID, TOKEN), False, timeout = 6)
     await message_api.post_message(group_id, MessageSendRequest(content=content))
 
-async def send_queue_message():
-    global sync_messages
-    while len(sync_messages):
-        message = sync_messages.pop(0)
-        try:
-            await notify_text(group_id = message.group_id, content = message.msg)
-        except BaseException as e:
-            s = traceback.format_exc()
-            print(e)
-            print(s)
-
-async def add_message(group_id: int, content: str):
-    global sync_messages
-    if content == "":
-        return
-    
-    meaasge =  await MessageManager.create_qq_message(int(time.time()), group_id = group_id, msg = content)
-    sync_messages.append(meaasge)
+async def send_message(group_id: int, content: str):
+    try:
+        await notify_text(group_id = group_id, content = content)
+    except BaseException as e:
+        s = traceback.format_exc()
+        print(e)
+        print(s)

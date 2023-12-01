@@ -22,4 +22,4 @@ async def send_message(message: Message):
         elif message.msg_type == MessageType.TG:
                 await TG.send_msg(message.group_id, message.msg)
         elif message.msg_type == MessageType.QQ:
-                await QQ.add_message(message.group_id, message.msg)
+                await QQ.send_message(message.group_id, message.msg)
