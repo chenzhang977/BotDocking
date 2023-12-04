@@ -14,3 +14,6 @@ class Forwardhandler(BaseHandler):
         if message.msg_type == MessageType.QQ:
             ret = await MessageManager.create_message(group_id = Config.tg_self_group, msg = msg, type = MessageType.TG)
             await MessageManager.send_message(ret)
+        if message.msg_type == MessageType.TG:
+            ret = await MessageManager.create_message(group_id = Config.qq_group_id, msg = msg, type = MessageType.QQ)
+            MessageManager.add_message(ret)

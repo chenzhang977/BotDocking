@@ -17,7 +17,7 @@ TOKEN = Config.qq_bot_token
 
 message_handler = []
 
-__all__ = ["init", "add_handler", "send_message"]
+__all__ = ["init", "add_handler", "send_msg"]
 
 def init():
     thread = threading.Thread(target = run)
@@ -70,7 +70,7 @@ async def notify_text(group_id: str, content: str):
     message_api = qqbot.AsyncMessageAPI(qqbot.Token(APPID, TOKEN), False, timeout = 6)
     await message_api.post_message(group_id, MessageSendRequest(content=content))
 
-async def send_message(group_id: int, content: str):
+async def send_msg(group_id: int, content: str):
     try:
         await notify_text(group_id = group_id, content = content)
     except BaseException as e:
