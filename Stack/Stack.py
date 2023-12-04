@@ -41,6 +41,6 @@ def record_broadcast():
     name_list = BF2042.get_all_name()
     for name in name_list:
         msg_type = MessageType.TG
-        group_id = msg_type == MessageType.TG and Config.tg_self_group or Config.qq_group_id
+        group_id = msg_type == MessageType.TG and Config.tg.tg_self_group or Config.qq.qq_group_id
         message = MessageManager.create_sync_message(group_id = group_id, msg = BF2042.get_record(name[0]),type = msg_type)
         MessageManager.add_message(message)

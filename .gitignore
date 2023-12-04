@@ -2,6 +2,5 @@
 /*.log
 /tg-bot.session
 /tg-bot.session-journal
-/Config/Config.json
-/test.py
 /api_test.py
+/Config/*.yml

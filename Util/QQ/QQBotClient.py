@@ -12,8 +12,8 @@ import Util.Message.MessageManager as MessageManager
 from qqbot.model.ws_context import WsContext
 from qqbot.model.message import MessageSendRequest
 
-APPID = Config.qq_bot_id
-TOKEN = Config.qq_bot_token
+APPID = Config.qq.qq_bot_id
+TOKEN = Config.qq.qq_bot_token
 
 message_handler = []
 
