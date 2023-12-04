@@ -10,6 +10,7 @@ class Forwardhandler(BaseHandler):
         self.cmd = ""
     
     async def handle(self, message : Message):
+        msg = f'{message.user_name}: {message.msg}' 
         if message.msg_type == MessageType.QQ:
-            ret = await MessageManager.create_message(group_id = Config.tg_self_group, msg = message.msg, type = MessageType.TG)
+            ret = await MessageManager.create_message(group_id = Config.tg_self_group, msg = msg, type = MessageType.TG)
             await MessageManager.send_message(ret)
