@@ -4,3 +4,4 @@
 /tg-bot.session-journal
 /api_test.py
 /Config/*.yml
+/build
