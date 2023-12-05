@@ -22,7 +22,6 @@ def get_info_by_api(name: str):
         damage = json_obj['damage']
         if kill > 0:
             update_db(name, kill, deaths, damage)
-
         return {'name':name, 'kill': kill, 'deaths': deaths, 'damage': damage}
     
     return "查询异常, 请查看log"
@@ -30,24 +29,17 @@ def get_info_by_api(name: str):
 def update_db(name: str, kill: int, deaths: int, damage: int):
     updateTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     cmd = f"INSERT INTO BF (updateTime, name, kill, deaths, damage) VALUES ('{updateTime}','{name}', '{kill}', '{deaths}', '{damage}')"
-    try:
-        DB.execute(cmd)
-    except Exception as e:
-        s = traceback.format_exc()
-        print(e)
-        print(s)
+    DB.execute(cmd)
 
 def get_record(name: str, hours: int = 24):
     end_time = datetime.now()
     start_time = end_time - timedelta(hours = hours)
     cmd = f"SELECT MAX(kill)-MIN(kill), MAX(deaths)-MIN(deaths), MAX(damage)-MIN(damage) FROM BF WHERE name='{name}' AND updateTime BETWEEN '{start_time.strftime('%Y-%m-%d %H:%M:%S')}' AND '{end_time.strftime('%Y-%m-%d %H:%M:%S')}'"
     ret = []
-    try:
-        ret = DB.execute(cmd)
-    except Exception as e:
-        s = traceback.format_exc()
-        print(e)
-        print(s)
+    
+    ret = DB.execute(cmd)
+    if not ret:
+        return "查询异常, 请查看log"
 
     kill = 0
     deaths = 0
@@ -62,13 +54,9 @@ def get_record(name: str, hours: int = 24):
             kd = round(kill/(deaths == 0 and 1 or deaths), 3)
 
     cmd = f"SELECT MAX(kill), MAX(deaths), MAX(damage) FROM BF WHERE name='{name}' AND updateTime BETWEEN '{start_time.strftime('%Y-%m-%d %H:%M:%S')}' AND '{end_time.strftime('%Y-%m-%d %H:%M:%S')}'"
-    ret = []
-    try:
-        ret = DB.execute(cmd)
-    except Exception as e:
-        s = traceback.format_exc()
-        print(e)
-        print(s)
+    ret = ret = DB.execute(cmd)
+    if not ret:
+        return "查询异常, 请查看log"
     
     max_kill = 0
     max_deaths = 0

@@ -1,4 +1,5 @@
 import sqlite3
+import traceback
 
 conn = None
 c = None
@@ -35,7 +36,13 @@ def create_BF2042_table():
     conn.commit()
 
 def execute(cmd):
-    c.execute(cmd)
-    conn.commit()
-    result = c.fetchall()
-    return result
+    try:
+        c.execute(cmd)
+        conn.commit()
+        result = c.fetchall()
+        return result
+    except Exception as e:
+        s = traceback.format_exc()
+        print(e)
+        print(s)
+        return None

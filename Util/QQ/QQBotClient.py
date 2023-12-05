@@ -67,13 +67,13 @@ async def get_msg(message: qqbot.Message) -> Message:
         return await MessageManager.create_none_message()  
 
 async def notify_text(group_id: str, content: str):
-    message_api = qqbot.AsyncMessageAPI(qqbot.Token(APPID, TOKEN), False, timeout = 6)
-    await message_api.post_message(group_id, MessageSendRequest(content=content))
-
-async def send_msg(group_id: int, content: str):
     try:
-        await notify_text(group_id = group_id, content = content)
+        message_api = qqbot.AsyncMessageAPI(qqbot.Token(APPID, TOKEN), False, timeout = 6)
+        await message_api.post_message(group_id, MessageSendRequest(content=content))
     except BaseException as e:
         s = traceback.format_exc()
         print(e)
         print(s)
+
+async def send_msg(group_id: int, content: str):
+    await notify_text(group_id = group_id, content = content)
