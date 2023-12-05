@@ -45,11 +45,11 @@ async def message_callback(context: WsContext, message: qqbot.Message):
             print(e)
             print(s)
 
-async def get_time_stamp(time) -> int:
+async def get_time_stamp(time)->int:
         timestamp = datetime.strptime(time, "%Y-%m-%dT%H:%M:%S%z").timestamp()
         return int(timestamp)
 
-async def get_msg(message: qqbot.Message) -> Message:
+async def get_msg(message: qqbot.Message)->Message:
     try:
         time = await get_time_stamp(message.timestamp)
         message_id = message.id
@@ -76,4 +76,7 @@ async def notify_text(group_id: str, content: str):
         print(s)
 
 async def send_msg(group_id: int, content: str):
+    if content == '':
+        return
+    
     await notify_text(group_id = group_id, content = content)

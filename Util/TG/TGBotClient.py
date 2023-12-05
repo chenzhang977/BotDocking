@@ -8,7 +8,7 @@ from Util.Message.Message import Message
 __all__ = ["run", "add_handler", "delete_msg", "send_msg", "delete_all_self_msg"]
 app = None
 
-def get_time_stamp(time) -> int:
+def get_time_stamp(time)->int:
     return int(time.timestamp())
 
 def init(name : str):
@@ -20,7 +20,7 @@ def run():
     global app
     app.run()
 
-async def get_msg(message) -> Message:
+async def get_msg(message)->Message:
     try:
         time = get_time_stamp(message.date)
         message_id = message.id
