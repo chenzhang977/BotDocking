@@ -60,4 +60,3 @@ if %errorlevel%==1 (
     start %root%../Run/%app%
     git reset --hard HEAD~1
 )
-pause

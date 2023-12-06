@@ -5,9 +5,9 @@ def run_bat(path: str)->int:
     stack = subprocess.Popen(path)
     return stack.pid
 
-def run_cmd(cmd: str):
+def run_cmd(cmd: str, cwd: str = None):
     try:
-        result = subprocess.run(cmd, text = True, shell = True, capture_output = True)
+        result = subprocess.run(cmd, text = True, shell = True, capture_output = True, cwd = cwd)
         return result
     except Exception as e:
         s = traceback.format_exc()

@@ -10,6 +10,7 @@ def init():
         c = conn.cursor()
         create_user_table()
         create_BF2042_table()
+        create_git_table()
         
 def create_user_table():
     global conn, c
@@ -33,6 +34,18 @@ def create_BF2042_table():
                 kill INTEGER,
                 deaths INTEGER,
                 damage INTEGER)''')
+    conn.commit()
+
+def create_git_table():
+    global conn, c
+    c.execute('''CREATE TABLE IF NOT EXISTS git
+        (id INTEGER PRIMARY KEY AUTOINCREMENT,
+        hash TEXT)''')
+    conn.commit()
+
+def delete_git_table():
+    global conn, c
+    c.execute('''DROP TABLE git''')
     conn.commit()
 
 def execute(cmd):

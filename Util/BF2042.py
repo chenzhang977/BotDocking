@@ -1,5 +1,4 @@
 import json
-import traceback
 import requests
 
 import Util.DB.DB as DB

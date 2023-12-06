@@ -8,3 +8,4 @@
 *.exe
 *.db
 *.yml
+/BuildAndRun/Build/build/pybot

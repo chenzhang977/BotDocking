@@ -5,6 +5,7 @@ import schedule
 
 import Util.DB.DB as DB
 import Util.BF2042 as BF2042
+import Util.Update as Update
 import Util.Message.MessageManager as MessageManager
 
 def init_stack():
@@ -24,6 +25,7 @@ def create_stack():
     DB.init()
     # 消息队列
     schedule.every(1).seconds.do(MessageManager.send_sync_message)
+    schedule.every(1).seconds.do(Update.fetch_apply_update)
     # 更新战绩
     schedule.every(1).hours.do(BF2042.update_all_info)
     # 战绩播报
