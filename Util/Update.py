@@ -62,7 +62,7 @@ async def reset_update():
     #ret = MessageManager.create_sync_message(group_id = Config.qq.qq_group_id, msg = msg, type = MessageType.QQ)
     #MessageManager.add_message(ret)
 
-    System.run_cmd(f'cmd /c start cmd /c {Config.update.bat_path}', os.path.dirname(Config.update.bat_path))
+    System.run_bat(f'cmd /c start cmd /c {Config.update.bat_path}', os.path.dirname(Config.update.bat_path))
     os._exit(0)
 
 def fetch_apply_update():

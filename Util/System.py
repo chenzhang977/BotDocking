@@ -1,8 +1,8 @@
 import subprocess
 import traceback
 
-def run_bat(path: str)->int:
-    stack = subprocess.Popen(path)
+def run_bat(path: str, cwd: str = None)->int:
+    stack = subprocess.Popen(path,cwd = cwd)
     return stack.pid
 
 def run_cmd(cmd: str, cwd: str = None):
