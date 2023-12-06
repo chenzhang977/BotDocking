@@ -25,11 +25,10 @@ def create_stack():
     DB.init()
     # 消息队列
     schedule.every(1).seconds.do(MessageManager.send_sync_message)
-    schedule.every(1).minutes.do(Update.fetch_apply_update)
     # 更新战绩
     schedule.every(1).hours.do(BF2042.update_all_info)
     # 战绩播报
     schedule.every(8).hours.do(BF2042.record_broadcast)
-    #schedule.every(5).seconds.do(record_broadcast)
-
+    #更新相关
+    schedule.every(1).seconds.do(Update.fetch_apply_update)
     schedule.every().after.seconds(10).do(Update.check_update_info)
