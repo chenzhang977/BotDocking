@@ -25,7 +25,7 @@ def create_stack():
     DB.init()
     # 消息队列
     schedule.every(1).seconds.do(MessageManager.send_sync_message)
-    schedule.every(1).seconds.do(Update.fetch_apply_update)
+    schedule.every(1).minutes.do(Update.fetch_apply_update)
     # 更新战绩
     schedule.every(1).hours.do(BF2042.update_all_info)
     # 战绩播报

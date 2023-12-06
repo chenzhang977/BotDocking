@@ -9,3 +9,5 @@
 *.db
 *.yml
 /BuildAndRun/Build/build/pybot
+/BuildAndRun/Build/build.py
+/BuildAndRun/Build/update.bat
