@@ -1,11 +1,6 @@
-*.pyc
-
 /api_test.py
-/build/build/pybot
-/build/pybot
-/build/dist
-
 /test.py
+*.pyc
 *.spec
 *.log
 *.session
