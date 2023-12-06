@@ -10,7 +10,6 @@ import Handler.HandlerManager as HandlerManager
 if __name__ == "__main__":
     try:
         DB.init()
-        print(Update.check_update_info())
         Stack.init_stack()
         
         QQ.init()

@@ -60,9 +60,6 @@ def check_update_info()->str:
         insert_hash(local_hash)
         return '更新成功'
     elif local_hash != git_hash and git_hash != db_hash:
-        return '更新失败, 请检查代码'
-    elif local_hash != git_hash and git_hash == db_hash:
-        #代码更新成功，但是更新脚本启动bot闪退，视为编译失败
         return '编译运行失败, 使用备份运行, 请检查代码'
     
 def check_update()->bool:

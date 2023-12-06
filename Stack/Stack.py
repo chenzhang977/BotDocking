@@ -31,3 +31,5 @@ def create_stack():
     # 战绩播报
     schedule.every(8).hours.do(BF2042.record_broadcast)
     #schedule.every(5).seconds.do(record_broadcast)
+
+    schedule.every().after.seconds(10).do(Update.check_update_info)
