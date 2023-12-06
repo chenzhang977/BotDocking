@@ -7,7 +7,7 @@ def run_bat(path: str)->int:
 
 def run_cmd(cmd: str):
     try:
-        result = subprocess.run(cmd, text = True)
+        result = subprocess.run(cmd, text = True, shell = True, capture_output = True)
         return result
     except Exception as e:
         s = traceback.format_exc()

@@ -7,15 +7,18 @@ import Util.QQ.QQBotClient as QQ
 import Handler.HandlerManager as HandlerManager
 
 if __name__ == "__main__":
-    DB.init()
-    Stack.init_stack()
-    
-    QQ.init()
-    QQ.add_handler(HandlerManager.create_all_handler())
+    try:
+        DB.init()
+        Stack.init_stack()
+        
+        QQ.init()
+        QQ.add_handler(HandlerManager.create_all_handler())
 
-    TG.init("tg-bot")
-    TG.add_handler(HandlerManager.create_all_handler(), filters.group)
-    TG.run()
-    
-    while True:
-        pass
+        TG.init("tg-bot")
+        TG.add_handler(HandlerManager.create_all_handler(), filters.group)
+        TG.run()
+        
+        while True:
+            pass
+    except Exception as e:
+        print(e)
