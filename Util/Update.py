@@ -29,7 +29,7 @@ def get_local_hash()->str:
 
 def get_git_hash()->str:
     git_url = Config.git.bot_docking_git_path
-    ret = System.run_cmd(f"git ls-remote {git_url} update_test")
+    ret = System.run_cmd(f"git ls-remote {git_url} main")
     if ret.stdout != '' and '\t' in ret.stdout:
         strs = ret.stdout.split("\t")
         return strs[0]
