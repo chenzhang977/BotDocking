@@ -13,8 +13,12 @@ def get_time_stamp(time)->int:
 
 def init(name : str):
     global app
-    app = Client(name)
-    app.set_proxy(hostname = "1270.0.0.1", port = 7890)
+    proxy = {
+        "scheme": "http",  # "socks4", "socks5" and "http" are supported
+        "hostname": "127.0.0.1",
+        "port": 7890,
+    }
+    app = Client(name,proxy = proxy)
 
 def run():
     global app
