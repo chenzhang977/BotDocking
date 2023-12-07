@@ -72,7 +72,7 @@ def check_update()->bool:
     print("local_hash: ", local_hash)
     print("git_hash: ", git_hash)
     print("db_hash: ", db_hash)
-    return db_hash != git_hash
+    return git_hash != '' and db_hash != git_hash
 
 async def reset_update():
     msg = '正在重启并更新'
