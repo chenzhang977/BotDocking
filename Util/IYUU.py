@@ -7,6 +7,9 @@ pid = -1
 
 def start()->int:
     global pid
+    if pid != -1:
+        return pid
+    
     pid = System.run_bat(bat_path, os.path.dirname(bat_path))
     return pid
 
