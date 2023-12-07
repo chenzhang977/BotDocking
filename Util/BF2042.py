@@ -1,10 +1,10 @@
 import json
 import requests
 
+import Util.Log as Log
 import Util.DB.DB as DB
 import Config.Config as Config
 import Util.Message.MessageManager as MessageManager
-
 from Util.Message.Message import MessageType
 from datetime import datetime, timedelta
 
@@ -86,11 +86,11 @@ def get_all_name():
     return ret
 
 def update_all_info():
-    print('开始更新所有玩家信息')
+    Log.logger.info('开始更新所有玩家信息')
     name_list = get_all_name()
     for name in name_list:
-        print(get_info_by_api(name[0]))
-    print('玩家信息更新结束')
+        Log.logger.info(str(get_info_by_api(name[0])))
+    Log.logger.info('玩家信息更新结束')
 
 def record_broadcast():
     name_list = get_all_name()

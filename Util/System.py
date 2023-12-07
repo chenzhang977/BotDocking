@@ -1,6 +1,8 @@
 import subprocess
 import traceback
 
+import Util.Log as Log
+
 def run_bat(path: str, cwd: str = None)->int:
     stack = subprocess.Popen(path,cwd = cwd)
     return stack.pid
@@ -11,8 +13,8 @@ def run_cmd(cmd: str, cwd: str = None):
         return result
     except Exception as e:
         s = traceback.format_exc()
-        print(e)
-        print(s)
+        Log.logger.info(e)
+        Log.logger.info(s)
         return None
 
 def is_run(pid: int)->bool:

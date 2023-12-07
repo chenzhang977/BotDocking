@@ -6,6 +6,7 @@ import threading
 from datetime import datetime
 from Util.Message.Message import Message
 
+import Util.Log as Log
 import Config.Config as Config
 import Util.Message.MessageManager as MessageManager
 
@@ -42,8 +43,8 @@ async def message_callback(context: WsContext, message: qqbot.Message):
             await handler.callback(msg)
         except Exception as e:
             s = traceback.format_exc()
-            print(e)
-            print(s)
+            Log.logger.info(e)
+            Log.logger.info(s)
 
 async def get_time_stamp(time)->int:
         timestamp = datetime.strptime(time, "%Y-%m-%dT%H:%M:%S%z").timestamp()
@@ -62,8 +63,8 @@ async def get_msg(message: qqbot.Message)->Message:
         return await MessageManager.create_qq_message(time, group_id, group_name, user_id, user_name, message_id, text)
     except BaseException as e:
         s = traceback.format_exc()
-        print(e)
-        print(s)
+        Log.logger.info(e)
+        Log.logger.info(s)
         return await MessageManager.create_none_message()  
 
 async def notify_text(group_id: str, content: str):
@@ -72,8 +73,8 @@ async def notify_text(group_id: str, content: str):
         await message_api.post_message(group_id, MessageSendRequest(content=content))
     except BaseException as e:
         s = traceback.format_exc()
-        print(e)
-        print(s)
+        Log.logger.info(e)
+        Log.logger.info(s)
 
 async def send_msg(group_id: int, content: str):
     if content == '':

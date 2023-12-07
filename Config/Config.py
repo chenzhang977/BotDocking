@@ -1,11 +1,14 @@
 import os
 import yaml
+
+import Util.Log as Log
+
 from yaml import CLoader
 
 configPath = 'Config/Config.yml'
 
 if not os.path.isfile(configPath):
-    print("配置文件不存在")
+    Log.logger.info("配置文件不存在")
 
 with open(configPath, 'r', encoding='utf-8') as f:
     data = yaml.load(f, Loader=CLoader)

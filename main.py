@@ -1,5 +1,6 @@
 from pyrogram import filters
 
+import Util.Log as Log
 import Util.DB.DB as DB
 import Stack.Stack as Stack
 import Util.Update as Update
@@ -7,10 +8,11 @@ import Util.TG.TGBotClient as TG
 import Util.QQ.QQBotClient as QQ
 import Handler.HandlerManager as HandlerManager
 
+
 if __name__ == "__main__":
     try:
         DB.init()
-        print(Update.check_update_info())
+        Log.logger.info(Update.check_update_info())
         Stack.init_stack()
         
         QQ.init()
@@ -23,4 +25,4 @@ if __name__ == "__main__":
         while True:
             pass
     except Exception as e:
-        print(e)
+        Log.logger.info(e)

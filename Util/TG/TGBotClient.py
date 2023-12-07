@@ -1,6 +1,7 @@
 import traceback
 import Util.Message.MessageManager as MessageManager
 
+import Util.Log as Log
 from pyrogram import Client
 from Util.Message.Message import Message
 
@@ -41,8 +42,8 @@ async def get_msg(message)->Message:
         return await MessageManager.create_tg_message(time, group_id, group_name,user_id, user_name, message_id, text)
     except BaseException as e:
         s = traceback.format_exc()
-        print(e)
-        print(s)
+        Log.logger.info(e)
+        Log.logger.info(s)
         return await MessageManager.create_none_message()
 
 def add_handler(handlers, filters = None):
@@ -55,8 +56,8 @@ def add_handler(handlers, filters = None):
                 await handler.callback(msg)
             except Exception as e:
                 s = traceback.format_exc()
-                print(e)
-                print(s)
+                Log.logger.info(e)
+                Log.logger.info(s)
 
 async def delete_msg(group_id : int, message_id : int):
     global app

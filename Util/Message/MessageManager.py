@@ -1,5 +1,7 @@
 import asyncio
 import traceback
+
+import Util.Log as Log
 import Util.TG.TGBotClient as TG
 import Util.QQ.QQBotClient as QQ
 
@@ -38,8 +40,8 @@ def send_sync_message():
                         loop.run_until_complete(send_message(message))
                 except Exception as e:
                         s = traceback.format_exc()
-                        print(e)
-                        print(s)
+                        Log.logger.info(e)
+                        Log.logger.info(s)
         sync_message_queue = []
 
 def add_message(message: Message):

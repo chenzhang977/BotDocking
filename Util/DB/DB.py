@@ -1,6 +1,8 @@
 import sqlite3
 import traceback
 
+import Util.Log as Log
+
 conn = None
 c = None
 
@@ -56,6 +58,6 @@ def execute(cmd):
         return result
     except Exception as e:
         s = traceback.format_exc()
-        print(e)
-        print(s)
+        Log.logger.info(e)
+        Log.logger.info(s)
         return None

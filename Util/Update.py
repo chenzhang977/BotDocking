@@ -3,6 +3,7 @@ import asyncio
 
 from anyio import sleep
 
+import Util.Log as Log
 import Util.DB.DB as DB
 import Util.System as System
 import Config.Config as Config
@@ -33,7 +34,7 @@ def get_git_hash()->str:
     if ret.stdout != '' and '\t' in ret.stdout:
         strs = ret.stdout.split("\t")
         return strs[0]
-    print('')
+    return ''
 
 def get_db_hash()->str:
     cmd = f"SELECT hash FROM git ORDER BY id DESC LIMIT 1"
@@ -46,9 +47,9 @@ def check_update_info()->str:
     local_hash = get_local_hash()
     git_hash = get_git_hash()
     db_hash = get_db_hash()
-    print("local_hash: ", local_hash)
-    print("git_hash: ", git_hash)
-    print("db_hash: ", db_hash)
+    Log.logger.info(f"local_hash: {local_hash}")
+    Log.logger.info(f"git_hash: {git_hash}")
+    Log.logger.info(f"db_hash: {db_hash}")
 
     if db_hash == '':
         insert_hash(local_hash)
@@ -69,9 +70,9 @@ def check_update()->bool:
     local_hash = get_local_hash()
     git_hash = get_git_hash()
     db_hash = get_db_hash()
-    print("local_hash: ", local_hash)
-    print("git_hash: ", git_hash)
-    print("db_hash: ", db_hash)
+    Log.logger.info(f"local_hash: {local_hash}")
+    Log.logger.info(f"git_hash: {git_hash}")
+    Log.logger.info(f"db_hash: {db_hash}")
     return git_hash != '' and db_hash != git_hash
 
 async def reset_update():

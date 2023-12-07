@@ -1,5 +1,7 @@
 import datetime
 
+import Util.Log as Log
+
 class MessageType:
     NULL = 0
     TG = 1
@@ -21,5 +23,5 @@ class Message:
         datetime_obj = datetime.datetime.fromtimestamp(self.time)
         formatted_datetime = datetime_obj.strftime("%Y-%m-%d %H:%M:%S")
         text = "{}-{}({})-{}({}) : {}".format(formatted_datetime, self.group_name, self.group_id, self.user_name, self.user_id, self.msg)
-        print(text)
+        Log.logger.info(text)
         return text
