@@ -67,12 +67,8 @@ def check_update_info()->str:
         return '编译运行失败, 使用备份运行, 请检查代码'
     
 def check_update()->bool:
-    local_hash = get_local_hash()
     git_hash = get_git_hash()
     db_hash = get_db_hash()
-    Log.logger.info(f"local_hash: {local_hash}")
-    Log.logger.info(f"git_hash: {git_hash}")
-    Log.logger.info(f"db_hash: {db_hash}")
     return git_hash != '' and db_hash != git_hash
 
 async def reset_update():
