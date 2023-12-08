@@ -8,19 +8,19 @@ class BF2042Handler(BaseHandler):
     def __init__(self):
         self.cmd = "2042"
         self.func = {}
-        self.func["24info"] = self.get_24_info
+        self.func["info"] = self.get_info
         self.func["bind"] = self.bind_id
 
     def help(self)->list:
         text = []
         text.append("【2042 bind name】 绑定游戏id\n")
-        text.append("【2042 24info name(可选)】 可查询玩家信息,括号内为总数据,name为空时查询绑定的角色信息\n")
+        text.append("【2042 info name(可选)】 可查询玩家信息,括号内为总数据,name为空时查询绑定的角色信息\n")
         return text
 
     async def get_game_id(self, id: int)->str:
         return  BF2042.get_name(id)
 
-    async def get_24_info(self, id: int, name: str)->str:
+    async def get_info(self, id: int, name: str)->str:
         name = name == "" and await self.get_game_id(id) or name
         if not name:
             return "未绑定游戏id\n" + ''.join(self.help())
