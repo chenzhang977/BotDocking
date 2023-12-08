@@ -1,8 +1,10 @@
 import asyncio
 import threading
 import time
+import traceback
 import schedule
 
+import Util.Log as Log
 import Util.DB.DB as DB
 import Util.BF2042 as BF2042
 import Util.Update as Update
@@ -18,7 +20,13 @@ def start_task():
 
     create_stack()
     while True:
-        schedule.run_pending()
+        try:
+            schedule.run_pending()
+        except Exception as e:
+            s = traceback.format_exc()
+            Log.logger.info(e)
+            Log.logger.info(s)
+
         time.sleep(1)
 
 def create_stack():

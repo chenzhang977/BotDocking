@@ -1,4 +1,5 @@
 import json
+import traceback
 import requests
 
 import Util.Log as Log
@@ -13,17 +14,23 @@ def bind_id(id: int, name: str):
     return  DB.execute(cmd)
 
 def get_info_by_api(name: str):
-    response = requests.get('https://api.gametools.network/bf2042/stats?name=' + name)
-    if response.status_code == 200:
-        json_obj = json.loads(response.text)
-        kill = json_obj['kills']
-        deaths = json_obj['deaths']
-        damage = json_obj['damage']
-        if kill > 0:
-            update_db(name, kill, deaths, damage)
-        return {'name':name, 'kill': kill, 'deaths': deaths, 'damage': damage}
-    
-    return "查询异常, 请查看log"
+    try:
+        response = requests.get('https://api.gametools.network/bf2042/stats?name=' + name)
+        if response.status_code == 200:
+            json_obj = json.loads(response.text)
+            kill = json_obj['kills']
+            deaths = json_obj['deaths']
+            damage = json_obj['damage']
+            if kill > 0:
+                update_db(name, kill, deaths, damage)
+            return {'name':name, 'kill': kill, 'deaths': deaths, 'damage': damage}
+        else:
+            return "查询失败"
+    except Exception as e:
+        s = traceback.format_exc()
+        Log.logger.info(e)
+        Log.logger.info(s)
+        return "查询异常, 请查看log"
 
 def update_db(name: str, kill: int, deaths: int, damage: int):
     updateTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
